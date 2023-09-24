@@ -83,23 +83,28 @@ public class MyBinaryTree {
         }
 
         if (data < node.data) {
-            return searchRecursion(node.leftNode, data);
+            return searchRecursion(node.leftNode, data); //n entendi
             
         } else if (data > node.data) {
-            return searchRecursion(node.rightNode, data);
+            return searchRecursion(node.rightNode, data); //n entendi
             
         } else {
-            if (node.leftNode == null) {
+            if (node.leftNode == null) { //verificando se o da esquerda é nulo blz
                 return node.rightNode;
 
-            } else if (node.rightNode == null) {
+            } else if (node.rightNode == null) { //verificando se o da direita é nulo blz
                 return node.leftNode;
 
             }
+            //isso aqui devia estar dentro de um else caso nenhum dos filhos fosse nulo
+            node.data = minValue(node); 
+            //achou o valor menor ok
+            //tem que substituir o minvalue por minvalue.left
+            //tem que substituir o valor a ser removido por minvalue
+            //retornar o root pq sim
+            //avisar o carinha que deu certo
 
-            node.data = minValue(node);
-
-            root.rightNode = deleteRecursion(node.rightNode, root.data);
+            root.rightNode = deleteRecursion(node.rightNode, root.data);//n entendi, tem que levar em consideração que a prof fez exemplo do root, talvez tenha confundido
         }
 
         return node;
