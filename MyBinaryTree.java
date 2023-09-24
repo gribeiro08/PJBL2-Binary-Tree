@@ -1,4 +1,5 @@
 public class MyBinaryTree {
+    static final int COUNT = 10; // Variável da função de print
     private MyNode root;
 
     // Subclasse dos nós da Árvore
@@ -33,72 +34,116 @@ public class MyBinaryTree {
             if (data < node.data) {
                 node.leftNode = insertRecursion(node.leftNode, data);
 
-            } else if (data > node.data) {
+            } else if (data >= node.data) {
                 node.rightNode = insertRecursion(node.rightNode, data);
-
-            } else {
-                return node;
 
             }
             return node;
         }
     }
 
-    // W.I.P.
-    void deleteData(int data) {
-        MyNode deleteNode = deleteRecursion(this.root, data);
+    // Função para verificar se um valor está na árvore
+    boolean searchTree(int data) {
+        MyNode node = searchRecursion(this.root, data);
 
-        if (deleteNode.leftNode == null && deleteNode.rightNode == null) {
-            // código para caso o Nó não tenha filhos
-        } else {
-            // código para caso o Nó tenha pelo menos um dos filhos
-        }
-    }
-
-    // W.I.P.
-    private MyNode deleteRecursion(MyNode node, int data) {
-        if (node.data == data && node.leftNode == null || node.rightNode == null) {
-            return null;
-        }
-        if (data < node.data) {
-            return deleteRecursion(node.leftNode, data);
-
-        } else if (data > node.data) {
-            return deleteRecursion(node.rightNode, data);
+        if (node != null && node.data == data) {
+            return true;
 
         } else {
-            return node;
+            return false;
 
         }
-    }
-
-    // Função para encontrar dados na Árvore seguindo o sistema de coordenadas (ex.: 1.2.2.1)
-    int getData(String pos) {
-        MyNode returnNode = this.getNodeByPos(pos);
-
-        return returnNode.data;
     }
 
     // Parte recursiva da função de busca
-    private MyNode getNodeByPos(String pos) {
-        if (pos == "1") {
-            return this.root;
-
-        } else {
-            String auxStr = pos.substring(2, pos.length());
-            char[] coordinates = auxStr.toCharArray();
-            MyNode node = this.root;
-
-            for (char coord : coordinates) {
-                if (coord == '1') {
-                    node = node.leftNode;
-
-                } else if (coord == '2') {
-                    node = node.rightNode;
-
-                }
-            }
-            return node;
+    private MyNode searchRecursion(MyNode node, int data) {
+        if (node == null) {
+            return null;
         }
+
+        if (data < node.data) {
+            return searchRecursion(node.leftNode, data);
+            
+        } else if (data > node.data) {
+            return searchRecursion(node.rightNode, data);
+            
+        }
+        return node;
+    }
+
+    // Função de deletar um dado da Árvore
+    void deleteData(int data) {
+        this.root = deleteRecursion(this.root, data);
+    }
+
+    // Parte recursiva da função de delete
+    private MyNode deleteRecursion(MyNode node, int data) {
+        if (node == null) {
+            return null;
+        }
+
+        if (data < node.data) {
+            return searchRecursion(node.leftNode, data);
+            
+        } else if (data > node.data) {
+            return searchRecursion(node.rightNode, data);
+            
+        } else {
+            if (node.leftNode == null) {
+                return node.rightNode;
+
+            } else if (node.rightNode == null) {
+                return node.leftNode;
+
+            }
+
+            node.data = minValue(node);
+
+            root.rightNode = deleteRecursion(node.rightNode, root.data);
+        }
+
+        return node;
+    }
+
+    // Função para encontrar o menor valor na Árvore
+    private int minValue(MyNode node) {
+        int minValue = node.data;
+
+        while (node.leftNode != null) {
+            minValue = node.leftNode.data;
+            node = node.leftNode;
+
+        }
+        return minValue;
+    }
+
+    // – = – Função de Print pega da internet 🤙 – = –
+
+    void print2D() {
+        // Pass initial space count as 0
+        print2DUtil(this.root, 0);
+    }
+
+    private void print2DUtil(MyNode root, int space) {
+        // Base case
+        if (root == null)
+            return;
+ 
+        // Increase distance between levels
+        space += COUNT;
+ 
+        // Process right child first
+        print2DUtil(root.rightNode, space);
+ 
+        // Print current node after space count
+        System.out.print("\n");
+
+        for (int i = COUNT; i < space; i++)
+            System.out.print(" ");
+
+        System.out.print(root.data + "\n");
+ 
+        // Process left child
+        print2DUtil(root.leftNode, space);
     }
 }
